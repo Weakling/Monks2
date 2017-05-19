@@ -28,7 +28,8 @@ public class ElderMonk : MonoBehaviour {
 	public float moveSpeedRoundEnd;     // max elder reset move speed
 	public float moveVelocity;          // applied move speed
 
-	// time
+    // time
+    public int rollChance;              // chance to roll a watching state
 	private bool readyToAct;            // loop of actions bool
 	private bool useCoolDownClock;
 	public float transitionTime;        // time spent in current state
@@ -72,14 +73,10 @@ public class ElderMonk : MonoBehaviour {
 	void Update () 
 	{
 		//check for round end
-		//roundEnd = battleManager.roundEnd;
-
-		//reset
-		if(BattleManager.roundEnd)            // end of round
+		if(BattleManager.roundEnd)            
 		{
-			ElderReset();       // elder returns to start position
-			transitionTime = 0;   
-			UseClock ();
+			ElderReset();   // elder returns to start position  
+			UseClock ();    // 
 			return;
 		}
 
@@ -100,7 +97,7 @@ public class ElderMonk : MonoBehaviour {
 			// elder starts the round watching
 			if(canLookAway)
 			{
-				isWatchingChance = Random.Range(0, 4); // chance to be watching
+				isWatchingChance = Random.Range(0, rollChance); // chance to be watching
                                                        // chance to look away is 1 in x
 			}
             // can't look away (start)...
@@ -136,7 +133,7 @@ public class ElderMonk : MonoBehaviour {
                     BattleManager.watching01 = true;    // is watching
                 else if (iAmElder02)
                     BattleManager.watching02 = true;
-				canLookAway = true;       // watching face state can roll
+				canLookAway = true;       // watching face state can be rolled
 				WaitPlease();             // disable future update state checks until clock is done
 
                 currentActionChance = Random.Range (0,3); // choose current action
@@ -226,5 +223,6 @@ public class ElderMonk : MonoBehaviour {
         }
         // set elder to watching
         canLookAway = false;
-	}
+        transitionTime = 0;
+    }
 }
