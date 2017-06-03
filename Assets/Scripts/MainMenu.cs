@@ -9,6 +9,10 @@ public class MainMenu : MonoBehaviour {
 	public GameObject mainMenuCanvas;
 	public GameObject vsMenuCanvas;
 
+    // blackout
+    public Image blackOut;
+    private bool vsModeStartBool;
+
     // gameobjects
     public GameObject elderGO, anvilGO, trainGO, anvilPrefab, trainPrefab;
 
@@ -46,15 +50,32 @@ public class MainMenu : MonoBehaviour {
 
 	void Start () 
 	{
-		vsMenuCanvas.SetActive (false);
+        // disable blackout image
+        blackOut.canvasRenderer.SetAlpha(0.0f);
+
+        vsMenuCanvas.SetActive (false);
         SetDefault();
         twoElders.interactable = false;
         onAnvil.interactable = false;
         onTrain.interactable = false;
 	}
-	
+
+    void FixedUpdate()
+    {
+        if(vsModeStartBool)
+        {
+            blackOut.canvasRenderer.SetAlpha(blackOut.canvasRenderer.GetAlpha() + .03f);
+            if(blackOut.canvasRenderer.GetAlpha() >= 1f)
+            {
+                // load level
+                //Application.LoadLevel (level01);
+                EditorSceneManager.LoadScene(1);
+            }
+        }
+    }
+
     // quit
-	public void Quit()
+    public void Quit()
 	{
 		Application.Quit ();
 	}
@@ -62,8 +83,16 @@ public class MainMenu : MonoBehaviour {
 	// vs start
 	public void vsModeStart()
 	{
-		//Application.LoadLevel (level01);
-        EditorSceneManager.LoadScene(1);
+        // disable buttons
+        oneElders.interactable = false;
+        twoElders.interactable = false;
+        onAnvil.interactable = false;
+        offAnvil.interactable = false;
+        onTrain.interactable = false;
+        offTrain.interactable = false;
+
+        // fadeout
+        vsModeStartBool = true;
 	}
 
     // click 2 elders
@@ -85,7 +114,7 @@ public class MainMenu : MonoBehaviour {
         // anvil clicked off
         if (oneElders.isOn == true)
         {
-            oneElders.interactable = false;  // can't click now
+            oneElders.interactable = false;   // can't click now
             twoElders.isOn = false;           // tick on removed
             twoElders.interactable = true;    // can click other
             elderScript.Sink();
@@ -146,6 +175,8 @@ public class MainMenu : MonoBehaviour {
         offAnvil.isOn = false;
         onTrain.isOn = true;
         offTrain.isOn = false;
+
+        vsModeStartBool = false;
     }
 
     private void SpawnAnvil()
@@ -163,4 +194,8 @@ public class MainMenu : MonoBehaviour {
         trainScript.spawnDestination = trainPosition;
         trainScript.Spawn();
     }
+
+     
+
+
 }

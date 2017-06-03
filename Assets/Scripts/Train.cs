@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Train : MonoBehaviour {
 
-
-
-
     public bool leaving, spawning;
     public float speed;
     public Transform spawnDestination;
@@ -16,12 +13,6 @@ public class Train : MonoBehaviour {
     {
         leaving = false;
         animator = GetComponent<Animator>();
-    }
-
-
-    void FixedUpdate()
-    {
-        
     }
 
     void Update()

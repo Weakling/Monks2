@@ -30,7 +30,6 @@ public class Anvil : MonoBehaviour {
         }
 	}
 
-
     public void Leave()
     {
         falling = true;
@@ -42,6 +41,5 @@ public class Anvil : MonoBehaviour {
         falling = true;
         spawning = true;
     }
-
 
 }
