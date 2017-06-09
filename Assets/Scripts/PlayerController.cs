@@ -5,8 +5,13 @@ public class PlayerController : MonoBehaviour {
 	
 	public GameObject Player01;
 	public GameObject Player02;
-	private Rigidbody2D body02;
+	
 	public float moveSpeed;
+
+    private Rigidbody2D myRigidbody2D;
+
+    // animation
+    private Animator myAnimator;
 
 	public bool lunge01;
 	public bool lunge02;
@@ -20,15 +25,15 @@ public class PlayerController : MonoBehaviour {
 	public Transform p2End;
 	public Transform p2Banished;
 
-	// Use this for initialization
-	void Start () 
+
+    void Awake()
+    {
+        myAnimator = GetComponent<Animator>();
+        myRigidbody2D = GetComponent<Rigidbody2D>();
+    }
+
+    void Start () 
 	{
-		//player02 rigidbody
-		body02 = Player02.GetComponent<Rigidbody2D> ();
-
-		//player02 direction face
-		body02.transform.localScale = new Vector3 (-1f, 1f, 1f);
-
 
 		lunge01 = false;
 		lunge02 = false;
@@ -38,59 +43,8 @@ public class PlayerController : MonoBehaviour {
 	
 	void Update () 
 	{
-		//player01 attack movement
-		if (lunge01) 
-		{
-			Player01.transform.position = Vector3.MoveTowards
-				(Player01.transform.position, p1End.position, Time.deltaTime * moveSpeed);
-		} 
-		else if(!lunge01 && !banished01) 
-		{
-			Player01Reset();
-		}
-
-		//player01 banished
-		if (banished01) 
-		{
-			Player01.transform.position = Vector3.MoveTowards
-				(Player01.transform.position, p1Banished.position, Time.deltaTime * moveSpeed);
-		}
-		else if(!lunge01 && !banished01) 
-		{
-			Player01Reset();
-		}
-		//player02 attack movement
-		if (lunge02) 
-		{
-			Player02.transform.position = Vector3.MoveTowards
-				(Player02.transform.position, p2End.position, Time.deltaTime * moveSpeed);
-		} 
-		else if(!lunge02 && !banished02) 
-		{
-			Player02Reset();
-		}
-
-		//player02 banished
-		if (banished02) 
-		{
-			Player02.transform.position = Vector3.MoveTowards
-				(Player02.transform.position, p2Banished.position, Time.deltaTime * moveSpeed);
-		} 
-		else if (!lunge02 && !banished02) 
-		{
-			Player02Reset();
-		}
+		
 	}
 
-	private void Player01Reset()
-	{
-		Player01.transform.position = Vector3.MoveTowards 
-			(Player01.transform.position, p1Start.position, Time.deltaTime * moveSpeed);
-	}
 
-	private void Player02Reset()
-	{
-		Player02.transform.position = Vector3.MoveTowards 
-			(Player02.transform.position, p2Start.position, Time.deltaTime * moveSpeed);
-	}
 }

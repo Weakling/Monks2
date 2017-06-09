@@ -9,23 +9,29 @@ public class OptionsManager : MonoBehaviour {
 
     [SerializeField] private GameObject elderMonk01;
     [SerializeField] private GameObject elderMonk02;
+    [SerializeField] private GameObject elderMonkSolo;
 
     public static int elderCount;
-    public static int trainHazard;
-    public static int spikeHazard;
-    
+    public static int anvilHazard;
+    public static int trainHazard;  
     
     void Awake ()
     {
         // find playerprefs info
         elderCount = PlayerPrefs.GetInt("ElderCount", 2);   // gets number of elders
+        anvilHazard = PlayerPrefs.GetInt("AnvilHazard", 1); // gets spikes true/false
         trainHazard = PlayerPrefs.GetInt("TrainHazard", 1); // gets train true/false
-        spikeHazard = PlayerPrefs.GetInt("SpikeHazard", 1); // gets spikes true/false
+
+
+        // DEBUG
+        print(elderCount);
+        print(anvilHazard);
+        print(trainHazard);
 
         // spawn one elder
         if (elderCount == 1)
         {
-            elderMonk01.transform.position = ElderSoloStart.transform.position; // elder monk spawns middle
+            Instantiate(elderMonkSolo, ElderSoloStart.transform.position, Quaternion.identity); // single elder monk spawns middle
         }
         // spawn two elders
         else if (elderCount == 2)

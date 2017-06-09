@@ -102,9 +102,10 @@ public class MainMenu : MonoBehaviour {
         if (twoElders.isOn == true)
         {
             twoElders.interactable = false;   // can't click now
-            oneElders.isOn = false;          // tick off removed
-            oneElders.interactable = true;   // can click other
+            oneElders.isOn = false;           // tick off removed
+            oneElders.interactable = true;    // can click other
             elderScript.Rise();
+            PlayerPrefs.SetInt("ElderCount", 2);
         }
     }
 
@@ -118,6 +119,7 @@ public class MainMenu : MonoBehaviour {
             twoElders.isOn = false;           // tick on removed
             twoElders.interactable = true;    // can click other
             elderScript.Sink();
+            PlayerPrefs.SetInt("ElderCount", 1);
         }
     }
 
@@ -130,6 +132,7 @@ public class MainMenu : MonoBehaviour {
             offAnvil.isOn = false;          // tick off removed
             offAnvil.interactable = true;   // can click other
             SpawnAnvil();
+            PlayerPrefs.SetInt("AnvilHazard", 1);
         }
     }
 
@@ -142,6 +145,7 @@ public class MainMenu : MonoBehaviour {
             onAnvil.isOn = false;           // tick on removed
             onAnvil.interactable = true;    // can click other
             anvilScript.Leave();
+            PlayerPrefs.SetInt("AnvilHazard", 0);
         }
     }
 
@@ -154,6 +158,7 @@ public class MainMenu : MonoBehaviour {
             offTrain.isOn = false;          // tick off removed
             offTrain.interactable = true;   // can click other
             SpawnTrain();
+            PlayerPrefs.SetInt("TrainHazard", 1);
         }
     }
 
@@ -166,6 +171,7 @@ public class MainMenu : MonoBehaviour {
             onTrain.isOn = false;           // tick on removed
             onTrain.interactable = true;    // can click other
             trainScript.Leave();
+            PlayerPrefs.SetInt("TrainHazard", 0);
         }
     }
 
@@ -177,6 +183,11 @@ public class MainMenu : MonoBehaviour {
         offTrain.isOn = false;
 
         vsModeStartBool = false;
+
+        // player prefs
+        PlayerPrefs.SetInt("ElderCount", 2);
+        PlayerPrefs.SetInt("AnvilHazard", 1);
+        PlayerPrefs.SetInt("TrainHazard", 1);
     }
 
     private void SpawnAnvil()
