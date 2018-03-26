@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Train : MonoBehaviour {
 
+    public OptionsManager myOptionsManager;
+
     public bool leaving, spawning;
     public float speed;
     public Transform spawnDestination;
     private Animator animator;
+    private float deathTimer;
 
     void Awake()
     {
+        deathTimer = 10;
         leaving = false;
         animator = GetComponent<Animator>();
     }
@@ -20,6 +24,11 @@ public class Train : MonoBehaviour {
         if (leaving)
         {
             transform.position = new Vector2(transform.position.x + speed * Time.deltaTime, transform.position.y);
+            deathTimer -= Time.deltaTime;
+            if(deathTimer <= 0)
+            {
+                Destroy(this.gameObject);
+            }
         }
         if (spawning)
         {

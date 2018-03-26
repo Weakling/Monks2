@@ -7,9 +7,11 @@ public class Anvil : MonoBehaviour {
     public bool falling, spawning;
     public float speed;
     public Transform spawnDestination;
+    private float deathTimer;
 
     void Awake()
     {
+        deathTimer = 3f;
         falling = false;
     }
 	
@@ -18,6 +20,11 @@ public class Anvil : MonoBehaviour {
 	    if(falling)
         {
             transform.position = new Vector2(transform.position.x, transform.position.y - speed * Time.deltaTime);
+            deathTimer -= Time.deltaTime;
+            if (deathTimer <= 0)
+            {
+                Destroy(this.gameObject);
+            }
         }	
         if(spawning)
         {
