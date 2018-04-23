@@ -41,11 +41,6 @@ public class BattleManager : MonoBehaviour {
 		hiddenText = FindObjectOfType<HiddenText> ();
 		playerController = FindObjectOfType<PlayerController> ();
 
-		//find animators
-
-		//player02 rigidbody
-		body02 = Player02.GetComponent<Rigidbody2D> ();
-
 		//set starting values
 		roundEnd = false;
 		roundResetTimeCounter = roundResetTime;

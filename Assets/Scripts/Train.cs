@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Train : MonoBehaviour {
 
-    public OptionsManager myOptionsManager;
+    
 
     public bool leaving, spawning;
     public float speed;

@@ -7,24 +7,27 @@ public class OptionsManager : MonoBehaviour {
     public Transform Elder02Start;
     public Transform ElderSoloStart;
     public Transform trainStartLeft, trainStartRight;
-    public Transform anvilStartLeft, anvilStartRight;
+    public Transform anvilStart;
 
     [SerializeField] private GameObject elderMonk01;
     [SerializeField] private GameObject elderMonk02;
     [SerializeField] private GameObject elderMonkSolo;
+    [SerializeField] private GameObject player1;
+    [SerializeField] private GameObject player2;
     [SerializeField] private GameObject trainGO;
     [SerializeField] private GameObject anvilGO;
 
-    private GameObject justMade; 
+    private GameObject justMadeTrain, justMadeAnvil; 
 
-    private Train currentTrain;
-    private Anvil currentAnvil;
+    private TrainCombat currentTrain;
+    private AnvilCombat currentAnvil;
 
     public static int elderCount;
     public static int anvilHazard;
     public static int trainHazard;
 
     private bool trainClockGoing, anvilClockGoing;
+    public bool trainCanSet, anvilCanSet;
 
     private float trainSpeed;
     public float trainSpeedLow, trainSpeedHigh;
@@ -64,41 +67,52 @@ public class OptionsManager : MonoBehaviour {
         }
     }
 
+    private void Start()
+    {
+        trainCanSet = true;
+        anvilCanSet = true;
+    }
+
     private void Update()
     {
-        if(!trainClockGoing)
+        if(trainHazard == 1)
         {
-            TrainSet();
-        }
-        else
-        {
-            trainTimer -= Time.deltaTime;
-            if(trainTimer <= 0)
+            if (!trainClockGoing)
             {
-                if(trainLeftRight == 0)
+                if (trainCanSet)
                 {
-                    justMade = Instantiate(trainGO, trainStartLeft.transform.position, Quaternion.identity);
+                    TrainSet();
                 }
-                else if (trainLeftRight == 1)
+            }
+            else
+            {
+                trainTimer -= Time.deltaTime;
+                if (trainTimer <= 0)
                 {
-                    justMade = Instantiate(trainGO, trainStartRight.transform.position, Quaternion.identity);
+                    TrainSpawn();
                 }
-                else
-                {
-                    Debug.LogError("your train's messed up");
-                }
-
-                currentTrain = justMade.GetComponent<Train>();
-                currentTrain.myOptionsManager = this.transform.GetComponent<OptionsManager>();
-                currentTrain.speed = trainSpeed;
-
             }
         }
 
-        if(!anvilClockGoing)
+        if(anvilHazard == 1)
         {
-            AnvilSet();
+            if (!anvilClockGoing)
+            {
+                if (anvilCanSet)
+                {
+                    AnvilSet();
+                }
+            }
+            else
+            {
+                anvilTimer -= Time.deltaTime;
+                if (anvilTimer <= 0)
+                {
+                    AnvilSpawn();
+                }
+            }
         }
+        
     }
 
 
@@ -110,11 +124,61 @@ public class OptionsManager : MonoBehaviour {
         trainSpeed = Random.Range(trainSpeedLow, trainSpeedHigh);
         trainLeftRight = Random.Range(0, 2);
         trainClockGoing = true;
+        trainCanSet = false;
+    }
+
+    public void TrainSpawn()
+    {
+        if (trainLeftRight == 0)
+        {
+            justMadeTrain = Instantiate(trainGO, trainStartLeft.transform.position, Quaternion.identity);
+        }
+        else if (trainLeftRight == 1)
+        {
+            justMadeTrain = Instantiate(trainGO, trainStartRight.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("your train's messed up");
+        }
+
+        trainClockGoing = false;
+        currentTrain = justMadeTrain.GetComponent<TrainCombat>();
+        currentTrain.myOptionsManager = this.transform.GetComponent<OptionsManager>();
+        currentTrain.speed = trainSpeed;
+        currentTrain.leftRight = trainLeftRight;
     }
 
 
     public void AnvilSet()
     {
         anvilTimer = Random.Range(anvilTimeLow, anvilTimeHigh);
+        anvilSpeed = Random.Range(anvilTimeLow, anvilTimeHigh);
+        anvilLeftRight = Random.Range(0, 2);
+        anvilClockGoing = true;
+        anvilCanSet = false;
+    }
+
+    public void AnvilSpawn()
+    {
+        if (anvilLeftRight == 0)
+        {
+            anvilStart.transform.position = new Vector2(player1.transform.position.x, anvilStart.transform.position.y);
+            justMadeAnvil = Instantiate(anvilGO, anvilStart.transform.position, Quaternion.identity);
+        }
+        else if (anvilLeftRight == 1)
+        {
+            anvilStart.transform.position = new Vector2(player2.transform.position.x, anvilStart.transform.position.y);
+            justMadeAnvil = Instantiate(anvilGO, anvilStart.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            Debug.LogError("your anvil's messed up");
+        }
+
+        anvilClockGoing = false;
+        currentAnvil = justMadeAnvil.GetComponent<AnvilCombat>();
+        currentAnvil.myOptionsManager = this.transform.GetComponent<OptionsManager>();
+        currentAnvil.speed = trainSpeed;
     }
 }
